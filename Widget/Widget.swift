@@ -8,11 +8,7 @@
 import WidgetKit
 import SwiftUI
 
-struct MemoryWidgetEntry: TimelineEntry, Equatable {
-    
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        return false
-    }
+struct MemoryWidgetEntry: TimelineEntry {
     
     var date: Date
     var freeCount: UInt64
