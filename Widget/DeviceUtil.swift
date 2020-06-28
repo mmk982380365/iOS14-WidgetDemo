@@ -8,6 +8,9 @@
 import Foundation
 
 public class DeviceUtil {
+    
+    /// Get current memory info
+    /// - Returns: memory info (free, active, inactive, wire)
     static func getMemory() -> (UInt64, UInt64, UInt64, UInt64) {
         
         let HOST_VM_INFO_COUNT = MemoryLayout<vm_statistics_data_t>.stride/MemoryLayout<integer_t>.stride;
@@ -30,12 +33,18 @@ public class DeviceUtil {
         
     }
     
+    /// Get total memory size
+    /// - Returns: total memory size
     static func getTotalMemorySize() -> UInt64 {
         return ProcessInfo.processInfo.physicalMemory
     }
 }
 
 public extension Double {
+    
+    /// Format number
+    /// - Parameter f: format
+    /// - Returns: formatted string
     func format(f: String) -> String {
         return String(format:"%\(f)f", self)
     }
