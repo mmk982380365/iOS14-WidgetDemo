@@ -8,57 +8,142 @@
 import WidgetKit
 import SwiftUI
 
-struct Provider: TimelineProvider {
-    public typealias Entry = SimpleEntry
+struct MemoryWidgetEntry: TimelineEntry, Equatable {
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return false
+    }
+    
+    var date: Date
+    var freeCount: UInt64
+    var activeCount: UInt64
+    var inactiveCount: UInt64
+    var wireCount: UInt64
+    
+    var freeCountDescription: String {
+        return "\((Double(freeCount) / 1024.0 / 1024.0).format(f: ".2")) MB"
+    }
+    
+    var activeCountDescription: String {
+        return "\((Double(activeCount) / 1024.0 / 1024.0).format(f: ".2")) MB"
+    }
+    
+    var inactiveCountDescription: String {
+        return "\((Double(inactiveCount) / 1024.0 / 1024.0).format(f: ".2")) MB"
+    }
+    
+    var wireCountDescription: String {
+        return "\((Double(wireCount) / 1024.0 / 1024.0).format(f: ".2")) MB"
+    }
+    
+}
 
-    public func snapshot(with context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date())
+struct MemoryWidgetProvider: TimelineProvider {
+    
+    func snapshot(with context: Context, completion: @escaping (MemoryWidgetEntry) -> ()) {
+        let (freeCount, activeCount, inactiveCount, wireCount) = DeviceUtil.getMemory()
+        let entry = MemoryWidgetEntry(date: Date(), freeCount: freeCount, activeCount: activeCount, inactiveCount: inactiveCount, wireCount: wireCount)
         completion(entry)
     }
+    
+    func timeline(with context: Context, completion: @escaping (Timeline<MemoryWidgetEntry>) -> ()) {
+        let date = Date()
+        let (freeCount, activeCount, inactiveCount, wireCount) = DeviceUtil.getMemory()
+        let entry = MemoryWidgetEntry(date: date, freeCount: freeCount, activeCount: activeCount, inactiveCount: inactiveCount, wireCount: wireCount)
+        
+        let nextDate = Calendar.current.date(byAdding: .second, value: 5, to: date)!
+        let timelime = Timeline(entries: [entry], policy: .after(nextDate))
+        completion(timelime)
+        
+    }
+    
+}
 
-    public func timeline(with context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        var entries: [SimpleEntry] = []
-
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate)
-            entries.append(entry)
+struct MemoryWidgetRow: View {
+    var title: String
+    var desc: String
+    
+    
+    var body: some View {
+        HStack {
+            Text("\(title):").font(.system(size: 12))
+            Spacer()
+            Text("\(desc)").font(.system(size: 12))
         }
-
-        let timeline = Timeline(entries: entries, policy: .atEnd)
-        completion(timeline)
     }
 }
 
-struct SimpleEntry: TimelineEntry {
-    public let date: Date
-}
-
-struct PlaceholderView : View {
+struct MemoryWidgetProgress: View {
+    var progress: Double
+    func actualProgress() -> CGFloat {
+        if progress < 0 {
+            return 0
+        } else if progress > 1 {
+            return 1
+        }
+        return CGFloat(progress)
+    }
     var body: some View {
-        Text("Placeholder View")
+        HStack {
+            GeometryReader { geometry in
+                Path { path in
+                    path.move(to: CGPoint(x: 0.0, y: 2.0))
+                    path.addLine(to: CGPoint(x: geometry.size.width, y: 2.0))
+                }.stroke(lineWidth: 4.0).foregroundColor(.gray)
+                Path { path in
+                    path.move(to: CGPoint(x: 0.0, y: 2.0))
+                    path.addLine(to: CGPoint(x: geometry.size.width * actualProgress(), y: 2.0))
+                }.stroke(lineWidth: 4.0).foregroundColor(.red)
+            }.fixedSize(horizontal: false, vertical: true)
+        }
     }
 }
 
-struct WidgetEntryView : View {
-    var entry: Provider.Entry
-
+struct MemoryWidgetView: View {
+    var entry: MemoryWidgetEntry
+    let totalMemory = Double(DeviceUtil.getTotalMemorySize())
     var body: some View {
-        Text(entry.date, style: .time)
+        VStack(spacing: 3) {
+            MemoryWidgetRow(title: "Free", desc: entry.freeCountDescription)
+            MemoryWidgetProgress(progress: Double(entry.freeCount) / totalMemory)
+            MemoryWidgetRow(title: "Active", desc: entry.activeCountDescription)
+            MemoryWidgetProgress(progress: Double(entry.activeCount) / totalMemory)
+            MemoryWidgetRow(title: "Inactive", desc: entry.inactiveCountDescription)
+            MemoryWidgetProgress(progress: Double(entry.inactiveCount) / totalMemory)
+            MemoryWidgetRow(title: "Wire", desc: entry.wireCountDescription)
+            MemoryWidgetProgress(progress: Double(entry.wireCount) / totalMemory)
+            
+            MemoryWidgetRow(title: "Total", desc: "\((self.totalMemory / 1024.0 / 1024.0).format(f: ".2")) MB").foregroundColor(.blue)
+            
+        }.padding()
+    }
+}
+
+struct MemoryWidget: Widget {
+    private var kind = "MemoryWidget"
+    public var body: some WidgetConfiguration {
+        StaticConfiguration(kind: kind,
+                            provider: MemoryWidgetProvider(),
+                            placeholder: MemoryWidgetView(entry: MemoryWidgetEntry(date: Date(), freeCount: 0, activeCount: 0, inactiveCount: 0, wireCount: 0))) { entry in
+            MemoryWidgetView(entry: entry)
+        }
+        .description("Show memory statistics")
+        .configurationDisplayName("Memory statistics")
+    }
+}
+
+struct MemoryWidgetPreviewer: PreviewProvider {
+    static var previews: some View {
+        Text("Demo")
     }
 }
 
 @main
-struct Widget: Widget {
-    private let kind: String = "Widget"
-
-    public var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider(), placeholder: PlaceholderView()) { entry in
-            WidgetEntryView(entry: entry)
-        }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+struct DemoWidgetBundle:  WidgetBundle {
+    
+    @WidgetBundleBuilder
+    var body: some Widget {
+        MemoryWidget()
+        DemoWidget()
     }
 }

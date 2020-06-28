@@ -18,6 +18,8 @@
 		4F9B487A24A8932300DD2B7B /* Widget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B487924A8932300DD2B7B /* Widget.swift */; };
 		4F9B487C24A8932400DD2B7B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F9B487B24A8932400DD2B7B /* Assets.xcassets */; };
 		4F9B488024A8932400DD2B7B /* WidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4F9B487224A8932200DD2B7B /* WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4F9B488824A8943A00DD2B7B /* DeviceUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B488524A8937F00DD2B7B /* DeviceUtil.swift */; };
+		4F9B488B24A8951E00DD2B7B /* DemoWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9B488924A8951300DD2B7B /* DemoWidget.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +61,8 @@
 		4F9B487924A8932300DD2B7B /* Widget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Widget.swift; sourceTree = "<group>"; };
 		4F9B487B24A8932400DD2B7B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4F9B487D24A8932400DD2B7B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4F9B488524A8937F00DD2B7B /* DeviceUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceUtil.swift; sourceTree = "<group>"; };
+		4F9B488924A8951300DD2B7B /* DemoWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoWidget.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +139,8 @@
 			isa = PBXGroup;
 			children = (
 				4F9B487924A8932300DD2B7B /* Widget.swift */,
+				4F9B488924A8951300DD2B7B /* DemoWidget.swift */,
+				4F9B488524A8937F00DD2B7B /* DeviceUtil.swift */,
 				4F9B487B24A8932400DD2B7B /* Assets.xcassets */,
 				4F9B487D24A8932400DD2B7B /* Info.plist */,
 			);
@@ -252,7 +258,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F9B488B24A8951E00DD2B7B /* DemoWidget.swift in Sources */,
 				4F9B487A24A8932300DD2B7B /* Widget.swift in Sources */,
+				4F9B488824A8943A00DD2B7B /* DeviceUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,7 +410,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"WidgetDemo/Preview Content\"";
-				DEVELOPMENT_TEAM = 3JZ5FTDGK8;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = WidgetDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -424,7 +432,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"WidgetDemo/Preview Content\"";
-				DEVELOPMENT_TEAM = 3JZ5FTDGK8;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = WidgetDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -444,7 +452,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3JZ5FTDGK8;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Widget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -465,7 +473,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3JZ5FTDGK8;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Widget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
