@@ -37,8 +37,7 @@ struct MemoryWidgetEntry: TimelineEntry {
 struct MemoryWidgetProvider: TimelineProvider {
     
     func snapshot(with context: Context, completion: @escaping (MemoryWidgetEntry) -> ()) {
-        let (freeCount, activeCount, inactiveCount, wireCount) = DeviceUtil.getMemory()
-        let entry = MemoryWidgetEntry(date: Date(), freeCount: freeCount, activeCount: activeCount, inactiveCount: inactiveCount, wireCount: wireCount)
+        let entry = MemoryWidgetEntry(date: Date(), freeCount: 0, activeCount: 0, inactiveCount: 0, wireCount: 0)
         completion(entry)
     }
     
